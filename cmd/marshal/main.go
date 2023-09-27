@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/353solutions/rides/pb"
-
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -32,4 +33,11 @@ func main() {
 		log.Fatalf("error: %s", err)
 	}
 	fmt.Println(&req2)
+	fmt.Println("protosize:", len(data))
+	jdata, err := protojson.Marshal(&req)
+	if err != nil {
+		log.Fatalf("Error marshaling data to json:%s", err)
+	}
+	fmt.Println("jsonsize:", len(jdata))
+	os.Stdout.Write(jdata)
 }
