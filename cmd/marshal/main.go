@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/353solutions/rides/pb"
 
+	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -20,5 +22,14 @@ func main() {
 		Time:         timestamppb.Now(),
 		Type:         pb.RideType_POOL,
 	}
-	fmt.Println(req)
+	fmt.Println(&req)
+	data, er := proto.Marshal(&req)
+	if er != nil {
+		log.Fatalf("error: %s", er)
+	}
+	var req2 pb.StartRequest
+	if err := proto.Unmarshal(data, &req2); err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	fmt.Println(&req2)
 }
