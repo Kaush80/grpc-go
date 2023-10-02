@@ -67,4 +67,32 @@ func main() {
 		log.Fatalf("error: %s", err)
 	}
 	fmt.Println(eresp)
+
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	stream,err:=c.Location(ctx)
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	lreq:=pb.LocationRequest{
+		DriverId:"007",
+		Location: &pb.Location{
+			Lat:51.234234234,
+			Lng:-0.234234234,
+		},
+	}
+	for i:=0.0;i<0.03;i+=0.01{
+		lreq.Location.Lat+=i
+		if err:=stream.Send(&lreq);err!=nil{
+			log.Fatalf("error: %s",err)
+		}
+
+		
+	}
+	lresp,err:=stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	fmt.Println(lresp	)
+
 }
